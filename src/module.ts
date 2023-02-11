@@ -35,7 +35,7 @@ export default defineNuxtModule<ModuleOptions>({
       enabled: nuxt.options.dev,
       config: {
       stories: [
-        '**/*.stories.@(js|jsx|ts|tsx|mdx)'
+        'components/*.stories.@(js|jsx|ts|tsx|mdx)'
       ],
       framework: '@storybook/vue3-vite',
       addons: [
