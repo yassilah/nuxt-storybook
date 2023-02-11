@@ -73,7 +73,7 @@ export default defineNuxtModule<ModuleOptions>({
       addTemplate({
         filename: '.storybook/main.mjs',
         write: true,
-        src: resolve('templates/main.mjs')
+        src: resolve('runtime/main.mjs')
       })
 
       addTemplate({
@@ -85,7 +85,7 @@ export default defineNuxtModule<ModuleOptions>({
       addTemplate({
         filename: '.storybook/preview.mjs',
         write: true,
-        src: resolve('templates/preview.mjs')
+        src: resolve('runtime/preview.mjs')
       })
 
       addTemplate({
