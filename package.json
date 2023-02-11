@@ -50,11 +50,8 @@
   },
   "unbuild": {
     "externals": [
-      "@storybook/addon-essentials",
-      "@storybook/addon-interactions",
-      "@storybook/vue3-vite",
-      "react",
-      "react-dom"
+      "@storybook/core-server",
+      "@storybook/vue3-vite"
     ]
   }
 }
