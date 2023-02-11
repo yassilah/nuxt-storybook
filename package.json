@@ -1,6 +1,6 @@
 {
   "name": "@yassidev/nuxt-storybook",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Storybook integration with Nuxt 3",
   "license": "MIT",
   "type": "module",
