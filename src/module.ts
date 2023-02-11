@@ -115,6 +115,15 @@ export default defineNuxtModule<ModuleOptions>({
       logger.info = newLogger.info.bind(newLogger)
       logger.trace = newLogger.trace.bind(newLogger)
 
+      // Extend server to close it when nuxt closes.
+      const { extendServer = () => {} } = options.buildOptions
+      options.buildOptions.extendServer = server => {
+        extendServer(server)
+        nuxt.hook('close', () => {
+          server.close()
+        })
+      }
+
       nuxt.hook('app:templatesGenerated', async () => {
         await nuxt.callHook('storybook:build:before', options.buildOptions)
         void buildDevStandalone(options.buildOptions).then(() => {

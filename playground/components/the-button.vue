@@ -8,5 +8,6 @@ const truc = useTruc()
     @click="truc"
   >
     <slot />
+    <FooBar />
   </button>
 </template>
