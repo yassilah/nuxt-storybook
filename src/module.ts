@@ -4,6 +4,7 @@ import { buildDevStandalone } from '@storybook/core-server'
 import { isAbsolute, join } from 'pathe'
 import consola from 'consola'
 import { logger } from '@storybook/node-logger'
+import '@nuxt/schema'
 
 
 export interface ModuleOptions {
@@ -18,6 +19,10 @@ export interface ModuleHooks {
   'storybook:config': (config: StorybookConfig) => void
   'storybook:build:before': (options: ModuleOptions['buildOptions']) => void
   'storybook:build:after': () => void
+}
+
+declare module '@nuxt/schema' {
+  interface NuxtHooks extends ModuleHooks {}
 }
 
 export default defineNuxtModule<ModuleOptions>({
