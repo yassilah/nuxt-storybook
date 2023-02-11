@@ -51,7 +51,9 @@
   "unbuild": {
     "externals": [
       "@storybook/core-server",
-      "@storybook/vue3-vite"
+      "@storybook/vue3-vite",
+      "@storybook/node-logger",
+      "consola"
     ]
   }
 }
