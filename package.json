@@ -48,7 +48,7 @@
   "eslintConfig": {
     "extends": "@nuxt"
   },
-  "build": {
+  "unbuild": {
     "externals": [
       "@storybook/addon-essentials",
       "@storybook/addon-interactions",
