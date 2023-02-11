@@ -47,5 +47,14 @@
   },
   "eslintConfig": {
     "extends": "@nuxt"
+  },
+  "build": {
+    "externals": [
+      "@storybook/addon-essentials",
+      "@storybook/addon-interactions",
+      "@storybook/vue3-vite",
+      "react",
+      "react-dom"
+    ]
   }
 }
