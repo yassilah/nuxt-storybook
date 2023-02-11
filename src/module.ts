@@ -2,6 +2,7 @@ import { defineNuxtModule, addTemplate, useNuxt, createResolver } from '@nuxt/ki
 import type { StorybookConfig } from '@storybook/vue3-vite'
 import { buildDevStandalone } from '@storybook/core-server'
 import { isAbsolute, join } from 'pathe'
+import { readPackageJSON } from 'pkg-types'
 import consola from 'consola'
 import { logger } from '@storybook/node-logger'
 import '@nuxt/schema'
@@ -61,7 +62,6 @@ export default defineNuxtModule<ModuleOptions>({
       await nuxt.callHook('storybook:config', options.config)
 
       const previewImports = options.previewImports ?? []
-
       await nuxt.callHook('storybook:preview:imports', previewImports)
 
       addTemplate({
@@ -95,7 +95,7 @@ export default defineNuxtModule<ModuleOptions>({
       })
 
       if (!options.buildOptions?.packageJson) {
-        const packageJson = await import(join(nuxt.options.rootDir, 'package.json'))
+        const packageJson = await readPackageJSON()
         options.buildOptions.packageJson = packageJson
       }
 
@@ -130,16 +130,18 @@ export default defineNuxtModule<ModuleOptions>({
  */
 function makeAbsoluteStoriesPaths(stories: StorybookConfig['stories']) {
   const nuxt = useNuxt()
-  const rootDir = nuxt.options.rootDir
-
-  return stories.map((story) => {
-    if (typeof story !== 'string') {
-      story.directory = isAbsolute(story.directory) ? story.directory : join(rootDir, story.directory)
-      return story
-    } else {
-      story = isAbsolute(story) ? story : join(rootDir, story)
-    }
-
-    return  story
+  
+  const list = nuxt.options._layers.flatMap(layer => {
+    return stories.map((story) => {
+      if (typeof story !== "string") {
+        story.directory = isAbsolute(story.directory) ? story.directory : join(layer.cwd, story.directory);
+        return story;
+      } else {
+        story = isAbsolute(story) ? story : join(layer.cwd, story);
+      }
+      return story;
+    });
   })
+
+  return [...new Set(list)]
 }
