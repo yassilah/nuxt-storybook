@@ -4,6 +4,7 @@
   "description": "Storybook integration with Nuxt 3",
   "license": "MIT",
   "type": "module",
+  "private": false,
   "exports": {
     ".": {
       "types": "./dist/types.d.ts",
