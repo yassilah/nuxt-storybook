@@ -34,14 +34,14 @@ export default defineNuxtModule<ModuleOptions>({
   defaults: (nuxt) => ({
       enabled: nuxt.options.dev,
       config: {
-      stories: [
-        'components/*.stories.@(js|jsx|ts|tsx|mdx)'
-      ],
-      framework: '@storybook/vue3-vite',
-      addons: [
-        '@storybook/addon-essentials',
-        '@storybook/addon-interactions',
-      ],
+        stories: [
+          'components/*.stories.@(js|jsx|ts|tsx|mdx)'
+        ],
+        framework: '@storybook/vue3-vite',
+        addons: [
+          '@storybook/addon-essentials',
+          '@storybook/addon-interactions',
+        ],
       },
       buildOptions: {
         configDir: join(nuxt.options.buildDir, '.storybook'),
