@@ -1,34 +1,21 @@
-import '@nuxt/schema'
-import {
-    addTemplate,
-    createResolver,
-    defineNuxtModule,
-    useNuxt
-} from '@nuxt/kit'
-import { buildDevStandalone } from '@storybook/core-server'
+import { addTemplate, defineNuxtModule, useNuxt } from '@nuxt/kit'
+import { buildOptions } from '../../../storybook/code/lib/core-server/src/build-dev'
 import { isAbsolute, join } from 'pathe'
 import { logger } from '@storybook/node-logger'
 import { readPackageJSON } from 'pkg-types'
-import { start } from './../../../storybook/code/lib/builder-nuxt/src'
+import { resolve } from 'pathe'
 import consola from 'consola'
-import type { StorybookConfig } from '@storybook/vue3-vite'
+import installStorybook from './storybook/install'
+import type {
+    StorybookConfig,
+    Parameters as StorybookParameters
+} from '@storybook/types'
 
 export interface ModuleOptions {
     enabled?: boolean
-    buildOptions: Parameters<typeof buildDevStandalone>[0]
     config: StorybookConfig
-    previewImports?: string[]
-}
-
-export interface ModuleHooks {
-    'storybook:preview:imports': (imports: string[]) => void
-    'storybook:config': (config: StorybookConfig) => void
-    'storybook:build:before': (options: ModuleOptions['buildOptions']) => void
-    'storybook:build:after': () => void
-}
-
-declare module '@nuxt/schema' {
-    type NuxtHooks = ModuleHooks
+    preview?: StorybookParameters
+    baseURL: string
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -40,74 +27,49 @@ export default defineNuxtModule<ModuleOptions>({
         enabled: nuxt.options.dev,
         config: {
             stories: ['components/*.stories.@(js|jsx|ts|tsx|mdx)'],
-            framework: '@storybook/nuxt',
+            framework: '@storybook/vue3-vite',
+            core: {
+                renderer: resolve(__dirname, 'storybook/renderer')
+            },
+            features: {
+                buildStoriesJson: false,
+                storyStoreV7: false
+            },
             addons: [
                 '@storybook/addon-essentials',
                 '@storybook/addon-interactions'
             ]
         },
-        buildOptions: {
-            configDir: join(nuxt.options.buildDir, '.storybook'),
-            quiet: true,
-            packageJson: undefined as any,
-            port: nuxt.options.devServer.port + 1,
-            cache: undefined,
-            loglevel: 'silent'
-        },
-        previewImports: []
+        baseURL: '/storybook',
+        preview: {
+            layout: 'centered',
+            controls: { expanded: true },
+            actions: { argTypesRegex: '^on[A-Z].*' }
+        }
     }),
     async setup(options, nuxt) {
         if (options.enabled) {
-            const { resolve } = createResolver(import.meta.url)
-
             options.config.stories = makeAbsoluteStoriesPaths(
                 options.config.stories
             )
 
-            await nuxt.callHook('storybook:config', options.config)
-
-            const previewImports = options.previewImports ?? []
-            await nuxt.callHook('storybook:preview:imports', previewImports)
-
-            addTemplate({
-                filename: '.storybook/main.options.json',
-                write: true,
-                getContents: () => JSON.stringify(options.config, null, 2)
-            })
-
             addTemplate({
                 filename: '.storybook/main.mjs',
                 write: true,
-                src: resolve('runtime/main.mjs')
-            })
-
-            addTemplate({
-                filename: '.storybook/preview.imports.json',
-                write: true,
-                getContents: () => JSON.stringify(previewImports, null, 2)
+                getContents: () =>
+                    `export default ${JSON.stringify(options.config, null, 2)}`
             })
 
             addTemplate({
                 filename: '.storybook/preview.mjs',
                 write: true,
-                src: resolve('runtime/preview.mjs')
+                getContents: () =>
+                    `export const parameters = ${JSON.stringify(
+                        options.preview,
+                        null,
+                        2
+                    )}`
             })
-
-            addTemplate({
-                filename: '.storybook/preview-head.html',
-                write: true,
-                getContents: () => `<script>window.global = window</script>`
-            })
-
-            if (!options.buildOptions?.packageJson) {
-                const packageJson = await readPackageJSON()
-                options.buildOptions.packageJson = packageJson
-            }
-
-            if (!options.buildOptions?.packageJson?.version) {
-                options.buildOptions.packageJson.version = '0.0.0'
-            }
-
             const newLogger = consola.create({
                 defaults: {
                     message: '[nuxt:storybook]',
@@ -120,19 +82,23 @@ export default defineNuxtModule<ModuleOptions>({
             logger.info = newLogger.info.bind(newLogger)
             logger.trace = newLogger.trace.bind(newLogger)
 
-            // Extend server to close it when nuxt closes.
-            const { extendServer = () => {} } = options.buildOptions
-            options.buildOptions.extendServer = server => {
-                extendServer(server)
-                nuxt.hook('close', () => {
-                    server.close()
-                })
+            const baseBuildOptions: Parameters<typeof buildOptions>[0] = {
+                configDir: join(nuxt.options.buildDir, '.storybook'),
+                outputDir: join(nuxt.options.buildDir, 'storybook'),
+                quiet: true,
+                packageJson: await readPackageJSON(),
+                port: nuxt.options.devServer.port,
+                loglevel: 'silent'
             }
 
-            void start({
-                options: options.buildOptions,
+            if (!baseBuildOptions?.packageJson?.version) {
+                baseBuildOptions.packageJson.version = '0.0.0'
+            }
+
+            installStorybook({
                 nuxt,
-                startTime: [0, 0]
+                baseURL: options.baseURL,
+                options: baseBuildOptions
             })
         }
     }
