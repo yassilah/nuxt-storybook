@@ -51,12 +51,15 @@
   },
   "unbuild": {
     "externals": [
-      "@storybook/core-server",
+      "@storybook",
       "@storybook/vue3-vite",
       "@storybook/node-logger",
+      "@storybook/core-server",
+      "@storybook/types",
       "consola",
       "pathe",
-      "pkg-types"
+      "pkg-types",
+      "vue"
     ]
   }
 }
