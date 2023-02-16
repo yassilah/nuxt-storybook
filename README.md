@@ -33,32 +33,10 @@ export default defineNuxtConfig({
     storybook: {
         config: {}, // What you would export from `.storybook/main`.
         buildOptions: {},  // Add any extra options for building the storybook server.
-        previewImports: []  // Import any extra files into your `.storybook/previews`.
+        parameters: {}  // Parameters you'd normally export from `.storybook/previews`.
     }
 })
 ```
-
-That's it! You can now use Nuxt-Storybook in your Nuxt app ✨
-
-## Example usage with TailwindCSS
-
-```ts
-import { resolve } from 'pathe'
-
-export default defineNuxtConfig({
-    modules: [
-        '@nuxtjs/tailwindcss',
-        '@yassidev/nuxt-storybook'
-    ],
-    storybook: {
-        previewImports: [
-            resolve(__dirname, 'node_modules/@nuxtjs/tailwindcss/dist/runtime/tailwind.css')
-        ]
-    }
-})
-```
-
-That's it! Your stories will now use your Tailwind config ✨
 
 ## Notes
 
