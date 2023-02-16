@@ -1,13 +1,20 @@
 <script setup lang="ts">
+defineProps<{
+    nice: string
+}>()
 const truc = useTruc()
+const { cool } = useAppConfig()
+const {
+    public: { foo }
+} = useRuntimeConfig()
 </script>
 
 <template>
-  <button
-    class="rounded bg-purple-500 text-white p-2"
-    @click="truc"
-  >
-    <slot />
-    <FooBar />
-  </button>
+    <div class="rounded bg-blue-500 text-white p-2" @click="truc">
+        <slot />
+        <FooBar />
+        <p>{{ cool }}</p>
+        <p>{{ foo }}</p>
+        <p>prop: {{ nice }}</p>
+    </div>
 </template>
