@@ -1,6 +1,6 @@
 {
   "name": "@yassidev/nuxt-storybook",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Storybook integration with Nuxt 3",
   "license": "MIT",
   "type": "module",
@@ -51,8 +51,6 @@
   },
   "unbuild": {
     "externals": [
-      "@storybook",
-      "@storybook/vue3-vite",
       "@storybook/node-logger",
       "@storybook/core-server",
       "@storybook/types",
