@@ -1,6 +1,6 @@
 {
   "name": "@yassidev/nuxt-storybook",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Storybook integration with Nuxt 3",
   "license": "MIT",
   "type": "module",
@@ -29,9 +29,6 @@
   },
   "dependencies": {
     "@nuxt/kit": "^3.2.0",
-    "@storybook/addon-essentials": "next",
-    "@storybook/addon-interactions": "next",
-    "@storybook/vue3-vite": "next",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -44,7 +41,10 @@
     "changelogen": "^0.4.1",
     "eslint": "^8.34.0",
     "nuxt": "^3.2.0",
-    "vitest": "^0.28.5"
+    "vitest": "^0.28.5",
+    "@storybook/addon-essentials": "next",
+    "@storybook/addon-interactions": "next",
+    "@storybook/vue3-vite": "next"
   },
   "eslintConfig": {
     "extends": "@apenhet"

@@ -44,10 +44,7 @@ export default defineNuxtModule<ModuleOptions>({
             core: {
                 renderer: resolve(__dirname, 'renderer')
             },
-            addons: [
-                '@storybook/addon-essentials',
-                '@storybook/addon-interactions'
-            ]
+            addons: []
         },
         buildOptions: {
             configDir: join(nuxt.options.buildDir, '.storybook'),

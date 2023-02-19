@@ -12,15 +12,15 @@
 
 # Using pnpm
 
-pnpm add -D @yassidev/nuxt-storybook
+pnpm add -D @yassidev/nuxt-storybook @storybook/vue3-vite
 
 # Using yarn
 
-yarn add --dev @yassidev/nuxt-storybook
+yarn add --dev @yassidev/nuxt-storybook @storybook/vue3-vite
 
 # Using npm
 
-npm install --save-dev @yassidev/nuxt-storybook
+npm install --save-dev @yassidev/nuxt-storybook @storybook/vue3-vite
 ```
 
 2. Add `@yassidev/nuxt-storybook` to the `modules` section of `nuxt.config.ts`
