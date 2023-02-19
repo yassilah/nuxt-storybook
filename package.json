@@ -51,6 +51,9 @@
   },
   "unbuild": {
     "externals": [
+      "@storybook/addon-essentials",
+      "@storybook/addon-interactions",
+      "@storybook/vue3-vite",
       "@storybook/node-logger",
       "@storybook/core-server",
       "@storybook/types",
